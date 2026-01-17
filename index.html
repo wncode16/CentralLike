@@ -3,27 +3,123 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Portal de Anúncios</title>
-  <link rel="stylesheet" href="./style.css" />
+  <title>Central Like — Anúncios</title>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Portal de Anúncios</h1>
-    <p>Classificados simples (sem API)</p>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">CL</div>
+      <div>
+        <h1>Central Like</h1>
+        <p>Anúncios rápidos, simples e bonitos</p>
+      </div>
+    </div>
+
+    <button class="btn ghost" id="btnAdmin">Publicar</button>
   </header>
 
-  <section class="filters">
-    <input id="q" placeholder="Buscar anúncio..." />
-    <select id="cat">
-      <option value="all">Todas categorias</option>
-      <option value="eletronicos">Eletrônicos</option>
-      <option value="imoveis">Imóveis</option>
-      <option value="veiculos">Veículos</option>
-      <option value="servicos">Serviços</option>
-    </select>
-  </section>
+  <main class="container">
+    <section class="hero">
+      <div class="hero__left">
+        <h2>Encontre o que você precisa</h2>
+        <p>Busque por cidade, produto, preço ou categoria.</p>
+      </div>
+      <div class="hero__right">
+        <div class="pill">⚡ Atualiza em tempo real</div>
+        <div class="pill">🔒 Publicação protegida</div>
+        <div class="pill">📱 100% responsivo</div>
+      </div>
+    </section>
 
-  <main id="list">Carregando…</main>
+    <section class="filters">
+      <input id="q" class="input" placeholder="Buscar anúncios..." />
+      <select id="category" class="input">
+        <option value="all">Todas categorias</option>
+        <option value="eletronicos">Eletrônicos</option>
+        <option value="imoveis">Imóveis</option>
+        <option value="veiculos">Veículos</option>
+        <option value="servicos">Serviços</option>
+        <option value="empregos">Empregos</option>
+        <option value="outros">Outros</option>
+      </select>
+      <button class="btn" id="btnRefresh">Atualizar</button>
+    </section>
+
+    <section class="status">
+      <span id="statusText">Carregando…</span>
+    </section>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+
+    <section class="center">
+      <button class="btn ghost" id="btnMore">Carregar mais</button>
+    </section>
+  </main>
+
+  <!-- Modal detalhe -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__sheet" role="dialog" aria-modal="true">
+      <button class="btn ghost small modal__close" data-close="1">Fechar ✕</button>
+
+      <img id="mImg" class="modal__img" alt="" />
+      <h3 id="mTitle" class="modal__title"></h3>
+      <div id="mMeta" class="modal__meta"></div>
+      <p id="mDesc" class="modal__desc"></p>
+
+      <div class="modal__actions">
+        <a id="mWhats" class="btn" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        <button class="btn ghost" data-close="1">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal admin (publicar) -->
+  <div class="modal" id="adminModal" aria-hidden="true">
+    <div class="modal__backdrop" data-close-admin="1"></div>
+    <div class="modal__sheet" role="dialog" aria-modal="true">
+      <button class="btn ghost small modal__close" data-close-admin="1">Fechar ✕</button>
+
+      <h3 class="modal__title">Publicar anúncio (Admin)</h3>
+      <p class="modal__meta">A senha admin NÃO fica salva no site. Digite apenas para publicar.</p>
+
+      <div class="form">
+        <input id="aTitle" class="input" placeholder="Título do anúncio" />
+        <div class="form__row">
+          <input id="aPrice" class="input" placeholder="Preço (ex: R$ 1.200)" />
+          <input id="aCity" class="input" placeholder="Cidade (ex: Curitiba-PR)" />
+        </div>
+        <div class="form__row">
+          <input id="aPhone" class="input" placeholder="WhatsApp (ex: 41999999999)" />
+          <select id="aCategory" class="input">
+            <option value="eletronicos">Eletrônicos</option>
+            <option value="imoveis">Imóveis</option>
+            <option value="veiculos">Veículos</option>
+            <option value="servicos">Serviços</option>
+            <option value="empregos">Empregos</option>
+            <option value="outros" selected>Outros</option>
+          </select>
+        </div>
+
+        <input id="aImage" class="input" placeholder="Link de imagem (opcional)" />
+        <textarea id="aDesc" class="input" rows="5" placeholder="Descrição"></textarea>
+
+        <input id="aKey" class="input" placeholder="ADMIN_KEY (segredo do Cloudflare)" />
+
+        <div class="modal__actions">
+          <button class="btn" id="btnPublish">Publicar agora</button>
+          <button class="btn ghost" data-close-admin="1">Cancelar</button>
+        </div>
+
+        <div class="statusLine" id="adminStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Central Like — Feito para Cloudflare Pages + KV</p>
+  </footer>
 
   <script src="./app.js"></script>
 </body>
