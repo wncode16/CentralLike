@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Central Like</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="./index.html">
+        <div class="logo" aria-hidden="true">CL</div>
+        <div>
+          <h1 id="siteName">Central Like</h1>
+          <p id="siteCity">Anúncios pagos • Brusque</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="./index.html">Início</a>
+        <a href="./pricing.html">Planos</a>
+        <a href="./submit.html">Publicar anúncio</a>
+        <a href="./contact.html">Contato</a>
+        <a href="./admin.html" class="mono">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero__left">
+        <h2 id="heroTitle">Anúncios pagos em Brusque</h2>
+        <p id="heroSubtitle">Destaques no topo. Pagamento por PIX, PayPal ou Mercado Pago. Aprovação via WhatsApp.</p>
+      </div>
+      <div class="hero__right">
+        <div class="pill">⭐ Destaques no topo</div>
+        <div class="pill">🔒 Aprovação manual</div>
+        <div class="pill">📱 Otimizado para celular</div>
+        <div class="pill">💬 Atendimento via WhatsApp</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Buscar anúncios</h3>
+      <div class="filters">
+        <input id="q" class="input" placeholder="Buscar por título, bairro, preço..." />
+        <select id="category" class="input">
+          <option value="">Todas as categorias</option>
+        </select>
+        <button id="btnRefresh" class="btn">Atualizar</button>
+        <a id="btnPublish" class="btn ghost" href="./submit.html">Publicar</a>
+      </div>
+      <div class="status" id="status">Carregando…</div>
+    </section>
+
+    <section class="section">
+      <h3>⭐ Destaques</h3>
+      <div id="featuredGrid" class="grid"></div>
+      <div class="status" id="featuredStatus"></div>
+    </section>
+
+    <section class="section">
+      <h3>Anúncios recentes</h3>
+      <div id="grid" class="grid" aria-live="polite"></div>
+      <div class="status" id="listStatus"></div>
+      <div style="display:flex;justify-content:center;margin-top:12px">
+        <button id="btnMore" class="btn ghost">Carregar mais</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Como anunciar</h3>
+      <ol class="small">
+        <li>Envie seu anúncio pela página <b>Publicar anúncio</b>.</li>
+        <li>Você receberá instruções de pagamento e confirmação pelo WhatsApp.</li>
+        <li>Após aprovação, seu anúncio fica ativo e pode aparecer em <b>Destaques</b> (conforme plano e critério).</li>
+      </ol>
+      <div class="row" style="margin-top:10px">
+        <a class="btn" id="waHelp" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        <a class="btn ghost" href="./pricing.html">Ver planos e preços</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal (detalhes do anúncio) -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__sheet" role="dialog" aria-modal="true">
+      <button class="btn ghost small modal__close" data-close="1">Fechar ✕</button>
+      <img id="mImg" class="modal__img" alt="" />
+      <h3 id="mTitle" class="modal__title"></h3>
+      <div id="mMeta" class="modal__meta"></div>
+      <p id="mDesc" class="modal__desc"></p>
+      <div class="modal__actions">
+        <a id="mWhats" class="btn" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        <button class="btn ghost" data-close="1">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> <span id="footerName">Central Like</span> — Brusque</p>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./site.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Planos — Central Like</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="./index.html">
+        <div class="logo" aria-hidden="true">CL</div>
+        <div>
+          <h1 id="siteName">Central Like</h1>
+          <p id="siteCity">Anúncios pagos • Brusque</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="./index.html">Início</a>
+        <a href="./pricing.html">Planos</a>
+        <a href="./submit.html">Publicar anúncio</a>
+        <a href="./contact.html">Contato</a>
+        <a href="./admin.html" class="mono">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero__left">
+        <h2>Planos e pagamento</h2>
+        <p>Você escolhe o plano e faz o pagamento. A aprovação e validade são definidas por você no admin.</p>
+      </div>
+      <div class="hero__right">
+        <div class="pill">PIX</div>
+        <div class="pill">PayPal</div>
+        <div class="pill">Mercado Pago</div>
+        <div class="pill">WhatsApp</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Planos</h3>
+      <div id="plans" class="grid"></div>
+      <div class="status" id="planNote"></div>
+    </section>
+
+    <section class="section">
+      <h3>Como pagar</h3>
+      <div class="row">
+        <div>
+          <div class="badge">PIX</div>
+          <p class="small">Chave PIX (copie):</p>
+          <div class="badge mono" id="pixKey">—</div>
+        </div>
+        <div>
+          <div class="badge">PayPal</div>
+          <p class="small">Link:</p>
+          <a class="badge mono" id="paypal" target="_blank" rel="noopener">—</a>
+        </div>
+        <div>
+          <div class="badge">Mercado Pago</div>
+          <p class="small">Link:</p>
+          <a class="badge mono" id="mp" target="_blank" rel="noopener">—</a>
+        </div>
+      </div>
+      <p class="small" id="payNotes" style="margin-top:12px"></p>
+      <div class="row" style="margin-top:10px">
+        <a class="btn" id="waPay" target="_blank" rel="noopener">Enviar comprovante no WhatsApp</a>
+        <a class="btn ghost" href="./submit.html">Publicar anúncio</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> <span id="footerName">Central Like</span></p>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./site.js"></script>
+  <script src="./pricing.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Central Like</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="./index.html">
+        <div class="logo" aria-hidden="true">CL</div>
+        <div>
+          <h1 id="siteName">Central Like</h1>
+          <p id="siteCity">Admin • Brusque</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="./index.html">Início</a>
+        <a href="./submit.html">Publicar</a>
+        <a href="./contact.html">Contato</a>
+        <a href="./pricing.html">Planos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero__left">
+        <h2>Painel Admin</h2>
+        <p>Aprove, marque como pago, coloque em destaque e defina validade quando quiser.</p>
+      </div>
+      <div class="hero__right">
+        <div class="pill">🔑 Protegido por ADMIN_KEY</div>
+        <div class="pill">⭐ Destaque</div>
+        <div class="pill">⏳ Validade</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Chave do Admin</h3>
+      <div class="filters">
+        <input id="key" class="input" placeholder="Cole sua ADMIN_KEY" />
+        <button id="btnSaveKey" class="btn">Salvar nesta sessão</button>
+        <button id="btnClearKey" class="btn ghost">Limpar</button>
+      </div>
+      <div class="status" id="keyStatus"></div>
+    </section>
+
+    <section class="section">
+      <h3>Anúncios</h3>
+      <div class="filters">
+        <select id="filterStatus" class="input" style="max-width:260px">
+          <option value="all">Todos</option>
+          <option value="pending">Pendentes</option>
+          <option value="active">Ativos</option>
+          <option value="rejected">Rejeitados</option>
+        </select>
+        <input id="filterQ" class="input" placeholder="Filtrar por título/whatsapp..." />
+        <button id="btnReload" class="btn">Recarregar</button>
+      </div>
+      <div class="status" id="adStatus"></div>
+      <div style="overflow:auto;margin-top:10px">
+        <table class="table" id="tableAds"></table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Mensagens de contato</h3>
+      <button id="btnLoadMsgs" class="btn ghost">Carregar mensagens</button>
+      <div class="status" id="msgStatus"></div>
+      <div style="overflow:auto;margin-top:10px">
+        <table class="table" id="tableMsgs"></table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> <span id="footerName">Central Like</span></p>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./site.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

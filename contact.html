@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contato — Central Like</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="./index.html">
+        <div class="logo" aria-hidden="true">CL</div>
+        <div>
+          <h1 id="siteName">Central Like</h1>
+          <p id="siteCity">Anúncios pagos • Brusque</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="./index.html">Início</a>
+        <a href="./pricing.html">Planos</a>
+        <a href="./submit.html">Publicar anúncio</a>
+        <a href="./contact.html">Contato</a>
+        <a href="./admin.html" class="mono">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero__left">
+        <h2>Contato</h2>
+        <p>Envie uma mensagem. Você também pode falar direto no WhatsApp.</p>
+      </div>
+      <div class="hero__right">
+        <div class="pill">📩 Mensagens salvas</div>
+        <div class="pill">💬 WhatsApp</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Formulário</h3>
+      <div class="row">
+        <input id="name" class="input" placeholder="Seu nome" />
+        <input id="phone" class="input" placeholder="WhatsApp (ex: 47999999999)" />
+      </div>
+      <div class="row">
+        <input id="email" class="input" placeholder="E-mail (opcional)" />
+        <input id="subject" class="input" placeholder="Assunto" />
+      </div>
+      <textarea id="message" class="input" rows="6" placeholder="Escreva sua mensagem"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button id="btnSend" class="btn">Enviar</button>
+        <a id="btnWa" class="btn ghost" target="_blank" rel="noopener">Falar no WhatsApp</a>
+      </div>
+      <div class="status" id="status"></div>
+    </section>
+
+    <section class="section">
+      <h3>Atalhos</h3>
+      <div class="row">
+        <a class="btn" href="./submit.html">Publicar anúncio</a>
+        <a class="btn ghost" href="./pricing.html">Ver planos</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> <span id="footerName">Central Like</span></p>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./site.js"></script>
+  <script src="./contact.js"></script>
+</body>
+</html>

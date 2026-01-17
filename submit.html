@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Publicar anúncio — Central Like</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="./index.html">
+        <div class="logo" aria-hidden="true">CL</div>
+        <div>
+          <h1 id="siteName">Central Like</h1>
+          <p id="siteCity">Anúncios pagos • Brusque</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="./index.html">Início</a>
+        <a href="./pricing.html">Planos</a>
+        <a href="./submit.html">Publicar anúncio</a>
+        <a href="./contact.html">Contato</a>
+        <a href="./admin.html" class="mono">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero__left">
+        <h2>Publicar anúncio</h2>
+        <p>Envie seu anúncio para aprovação. Você decide a validade e se entra em destaque no topo.</p>
+      </div>
+      <div class="hero__right">
+        <div class="pill">✅ Aprovação manual</div>
+        <div class="pill">💳 Pagamento por PIX / PayPal / Mercado Pago</div>
+        <div class="pill">💬 Confirmação via WhatsApp</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Dados do anúncio</h3>
+      <div class="row">
+        <input id="title" class="input" placeholder="Título (ex: Vendo bicicleta aro 29)" />
+        <input id="price" class="input" placeholder="Preço (ex: R$ 850)" />
+      </div>
+      <div class="row">
+        <select id="category" class="input"></select>
+        <input id="neighborhood" class="input" placeholder="Bairro (opcional)" />
+      </div>
+      <div class="row">
+        <input id="whatsapp" class="input" placeholder="WhatsApp (somente números, ex: 47999999999)" />
+        <input id="image" class="input" placeholder="Link de imagem (opcional)" />
+      </div>
+      <textarea id="description" class="input" rows="6" placeholder="Descrição completa do anúncio"></textarea>
+
+      <h3 style="margin-top:14px">Plano</h3>
+      <select id="plan" class="input"></select>
+      <p class="small" id="payInfo"></p>
+
+      <div class="row" style="margin-top:10px">
+        <button id="btnSubmit" class="btn">Enviar para aprovação</button>
+        <a class="btn ghost" href="./pricing.html">Ver planos</a>
+      </div>
+
+      <div class="status" id="status"></div>
+    </section>
+
+    <section class="section">
+      <h3>Pagamento</h3>
+      <p class="small">Você pode pagar com PIX, PayPal ou Mercado Pago. Envie o comprovante no WhatsApp para agilizar.</p>
+      <div class="row">
+        <div>
+          <div class="badge">PIX</div>
+          <div class="badge mono" id="pixKey">—</div>
+        </div>
+        <div>
+          <div class="badge">PayPal</div>
+          <a class="badge mono" id="paypal" target="_blank" rel="noopener">—</a>
+        </div>
+        <div>
+          <div class="badge">Mercado Pago</div>
+          <a class="badge mono" id="mp" target="_blank" rel="noopener">—</a>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <a class="btn" id="waProof" target="_blank" rel="noopener">Enviar comprovante no WhatsApp</a>
+        <a class="btn ghost" href="./contact.html">Falar pelo formulário</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> <span id="footerName">Central Like</span></p>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./site.js"></script>
+  <script src="./submit.js"></script>
+</body>
+</html>
