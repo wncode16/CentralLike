@@ -1,5 +1,5 @@
-import { json, badRequest } from './_lib/http.js';
-import { readJson, writeJson, nowIso } from './_lib/store.js';
+import { json, badRequest } from '../_lib/http.js';
+import { readJson, writeJson, nowIso } from '../_lib/store.js';
 
 const KEY_MSGS = 'messages';
 
