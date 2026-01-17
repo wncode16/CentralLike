@@ -35,11 +35,14 @@ export async function onRequestGet(context) {
   }
 
   // featured first, then newest
-  list.sort((a,b) => {
+  list.sort((a, b) => {
     const fa = a.featured ? 1 : 0;
     const fb = b.featured ? 1 : 0;
     if (fb !== fa) return fb - fa;
-    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+
+    const ta = new Date(a.createdAt || 0).getTime();
+    const tb = new Date(b.createdAt || 0).getTime();
+    return (Number.isNaN(tb) ? 0 : tb) - (Number.isNaN(ta) ? 0 : ta);
   });
 
   return json(list);
