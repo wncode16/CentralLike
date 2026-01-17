@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "title": "iPhone 12 128GB",
+    "price": "R$ 2.399",
+    "city": "Curitiba - PR",
+    "phone": "(41) 99999-9999",
+    "description": "Aparelho em ótimo estado, bateria 86%, acompanha caixa.",
+    "images": [],
+    "createdAt": "2026-01-16T12:00:00.000Z",
+    "category": "eletronicos"
+  },
+  {
+    "id": "2",
+    "title": "Alugo casa 2 quartos",
+    "price": "R$ 1.500/mês",
+    "city": "Joinville - SC",
+    "phone": "(47) 98888-8888",
+    "description": "Casa com garagem, próxima ao centro. Água e luz à parte.",
+    "images": [],
+    "createdAt": "2026-01-15T18:30:00.000Z",
+    "category": "imoveis"
+  }
+]
