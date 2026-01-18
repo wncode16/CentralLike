@@ -19,24 +19,34 @@ function parseBasicAuth(header) {
 }
 
 /**
- * Protege endpoints admin.
- * Espera:
- *  - Secrets: ADMIN_USER, ADMIN_PASS (recomendado)
- *  - ou fallback: header x-admin-key === env.ADMIN_KEY
+ * Protege endpoints admin via Basic Auth.
+ * - Preferência: env.ADMIN_USER e env.ADMIN_PASS (Secrets do Cloudflare)
+ * - Fallback: admin / admin123
+ * - Extra (opcional): header x-admin-key comparado com env.ADMIN_KEY
+ *
+ * Uso esperado:
+ *   const auth = requireAdmin(request, env);
+ *   if (!auth.ok) return json({ error: auth.error }, 401);
  */
-export function requireAdmin(context) {
-  const { request, env } = context;
-
+export function requireAdmin(request, env) {
   // 1) Basic Auth (login/senha)
   const basic = parseBasicAuth(request.headers.get('Authorization'));
-  if (basic && env.ADMIN_USER && env.ADMIN_PASS) {
-    if (basic.user === env.ADMIN_USER && basic.pass === env.ADMIN_PASS) return null;
-    return unauthorized('Invalid credentials');
+  const user = (env?.ADMIN_USER || 'admin').trim();
+  const pass = (env?.ADMIN_PASS || 'admin123').trim();
+
+  if (basic) {
+    if (basic.user === user && basic.pass === pass) {
+      return { ok: true };
+    }
+    return { ok: false, error: 'Login ou senha inválidos' };
   }
 
-  // 2) Fallback: X-Admin-Key
+  // 2) Fallback opcional: X-Admin-Key (se você usar ADMIN_KEY)
   const key = request.headers.get('x-admin-key') || '';
-  if (env.ADMIN_KEY && key === env.ADMIN_KEY) return null;
+  if (env?.ADMIN_KEY && key === env.ADMIN_KEY) {
+    return { ok: true };
+  }
 
-  return unauthorized('Missing admin auth');
+  // não enviou Authorization
+  return { ok: false, error: 'Informe login e senha' };
 }
