@@ -51,8 +51,20 @@
       </div>
       <div class="row">
         <input id="whatsapp" class="input" placeholder="WhatsApp (somente números, ex: 47999999999)" />
-        <input id="image" class="input" placeholder="Link de imagem (opcional)" />
+
+        <!-- Upload de imagem (R2) -->
+        <input id="imageFile" class="input" type="file" accept="image/*" />
       </div>
+
+      <!-- Preview -->
+      <div class="row" style="gap:12px; align-items:flex-start; margin-top:6px">
+        <div class="small" style="opacity:.85">
+          Imagem opcional (JPG/PNG/WebP). Recomendado até 5MB.
+        </div>
+        <img id="imagePreview" alt="Prévia da imagem"
+             style="display:none; max-width:260px; border-radius:14px; border:1px solid rgba(255,255,255,.12);" />
+      </div>
+
       <textarea id="description" class="input" rows="6" placeholder="Descrição completa do anúncio"></textarea>
 
       <h3 style="margin-top:14px">Plano</h3>
@@ -98,5 +110,26 @@
   <script src="./config.js"></script>
   <script src="./site.js"></script>
   <script src="./submit.js"></script>
+
+  <!-- Preview (não envia nada sozinho; o submit.js vai fazer upload) -->
+  <script>
+    (function(){
+      const fileEl = document.getElementById('imageFile');
+      const prev = document.getElementById('imagePreview');
+
+      if (!fileEl || !prev) return;
+
+      fileEl.addEventListener('change', () => {
+        const f = fileEl.files && fileEl.files[0];
+        if (!f) {
+          prev.style.display = 'none';
+          prev.removeAttribute('src');
+          return;
+        }
+        prev.src = URL.createObjectURL(f);
+        prev.style.display = 'block';
+      });
+    })();
+  </script>
 </body>
 </html>
