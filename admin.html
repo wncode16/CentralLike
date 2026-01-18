@@ -123,4 +123,81 @@
           <h3 id="adModalTitle" style="margin:0">Prévia do anúncio</h3>
           <p class="small" id="adModalMeta" style="margin:6px 0 0 0"></p>
         </div>
-        <button class="btn ghost mini" id="adModalClose">
+        <button class="btn ghost mini" id="adModalClose">Fechar</button>
+      </div>
+
+      <div class="modal__body">
+        <div class="modal__grid">
+          <div class="modal__imgwrap">
+            <img id="adModalImg" alt="Imagem do anúncio" />
+            <div class="small" id="adModalImgEmpty" style="display:none">Sem imagem</div>
+            <div class="row" style="margin-top:10px">
+              <a class="btn mini" id="adModalOpenImg" target="_blank" rel="noopener">Abrir imagem</a>
+              <a class="btn mini ghost" id="adModalOpenWa" target="_blank" rel="noopener">Abrir WhatsApp</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="badge" id="adModalBadges"></div>
+
+            <h3 style="margin:12px 0 6px 0" id="adModalTitle2">—</h3>
+            <p class="small" id="adModalDesc" style="white-space:pre-wrap; margin:0"></p>
+
+            <div class="section" style="margin-top:12px">
+              <div class="row">
+                <div style="flex:1">
+                  <div class="small">Preço</div>
+                  <div id="adModalPrice" class="mono">—</div>
+                </div>
+                <div style="flex:1">
+                  <div class="small">Bairro</div>
+                  <div id="adModalNeighborhood">—</div>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:10px">
+                <div style="flex:1">
+                  <div class="small">Categoria</div>
+                  <div id="adModalCategory">—</div>
+                </div>
+                <div style="flex:1">
+                  <div class="small">WhatsApp</div>
+                  <div id="adModalWhatsapp" class="mono">—</div>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:10px">
+                <div style="flex:1">
+                  <div class="small">Status</div>
+                  <div id="adModalStatus">—</div>
+                </div>
+                <div style="flex:1">
+                  <div class="small">Validade</div>
+                  <div id="adModalExpiry">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:10px; justify-content:flex-end">
+              <button class="btn mini" id="adModalApprove">Aprovar</button>
+              <button class="btn mini ghost" id="adModalReject">Rejeitar</button>
+              <button class="btn mini ghost" id="adModalToggleFeatured">⭐ Destaque</button>
+              <button class="btn mini ghost" id="adModalSetExpiry">⏳ Validade</button>
+            </div>
+
+            <div class="status" id="adModalStatusLine"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> <span id="footerName">Central Like</span></p>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script src="./site.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>
