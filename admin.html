@@ -25,54 +25,89 @@
     </div>
   </header>
 
+  <!-- LOGIN -->
   <main class="container">
-    <section class="hero">
-      <div class="hero__left">
-        <h2>Painel Admin</h2>
-        <p>Aprove, marque como pago, coloque em destaque e defina validade quando quiser.</p>
+    <section class="section" id="loginBox">
+      <h2 style="margin:0 0 10px 0">Entrar no Admin</h2>
+
+      <div class="row">
+        <input id="adminUser" class="input" placeholder="Login" autocomplete="username" />
+        <input id="adminPass" class="input" placeholder="Senha" type="password" autocomplete="current-password" />
       </div>
-      <div class="hero__right">
-        <div class="pill">🔑 Protegido por ADMIN_KEY</div>
-        <div class="pill">⭐ Destaque</div>
-        <div class="pill">⏳ Validade</div>
+
+      <div class="row" style="margin-top:10px">
+        <button id="btnLogin" class="btn">Entrar</button>
+        <button id="btnLogout" class="btn ghost" style="display:none">Sair</button>
       </div>
+
+      <div class="status" id="loginStatus"></div>
+      <p class="small" style="margin-top:10px; opacity:.9">
+        Dica: você pode alterar depois no Cloudflare → Pages → Settings → Variables and Secrets.
+      </p>
     </section>
 
-    <section class="section">
-      <h3>Chave do Admin</h3>
-      <div class="filters">
-        <input id="key" class="input" placeholder="Cole sua ADMIN_KEY" />
-        <button id="btnSaveKey" class="btn">Salvar nesta sessão</button>
-        <button id="btnClearKey" class="btn ghost">Limpar</button>
-      </div>
-      <div class="status" id="keyStatus"></div>
-    </section>
+    <!-- PAINEL (só aparece após login) -->
+    <section class="section" id="panel" style="display:none">
+      <div class="row" style="align-items:center; gap:12px">
+        <h2 style="margin:0">Anúncios</h2>
 
-    <section class="section">
-      <h3>Anúncios</h3>
-      <div class="filters">
-        <select id="filterStatus" class="input" style="max-width:260px">
+        <select id="filterStatus" class="input" style="max-width:220px">
           <option value="all">Todos</option>
           <option value="pending">Pendentes</option>
           <option value="active">Ativos</option>
           <option value="rejected">Rejeitados</option>
         </select>
-        <input id="filterQ" class="input" placeholder="Filtrar por título/whatsapp..." />
+
+        <button id="btnFeaturedOnly" class="btn ghost">Destaques</button>
+
+        <input id="q" class="input" placeholder="Filtrar por título/whatsapp..." style="flex:1" />
         <button id="btnReload" class="btn">Recarregar</button>
       </div>
-      <div class="status" id="adStatus"></div>
-      <div style="overflow:auto;margin-top:10px">
-        <table class="table" id="tableAds"></table>
+
+      <p class="small" id="countInfo" style="margin:10px 0 0 0"></p>
+
+      <div class="table-wrap" style="margin-top:12px">
+        <table class="table" id="adsTable">
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Título</th>
+              <th>Categoria</th>
+              <th>Plano</th>
+              <th>Pago</th>
+              <th>WhatsApp</th>
+              <th>Destaques</th>
+              <th>Expira</th>
+              <th style="width:340px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="adsBody"></tbody>
+        </table>
       </div>
+
+      <div class="status" id="status"></div>
     </section>
 
-    <section class="section">
-      <h3>Mensagens de contato</h3>
-      <button id="btnLoadMsgs" class="btn ghost">Carregar mensagens</button>
-      <div class="status" id="msgStatus"></div>
-      <div style="overflow:auto;margin-top:10px">
-        <table class="table" id="tableMsgs"></table>
+    <section class="section" id="messagesPanel" style="display:none">
+      <div class="row" style="align-items:center; gap:12px">
+        <h2 style="margin:0">Mensagens de contato</h2>
+        <button id="btnLoadMsgs" class="btn ghost">Carregar mensagens</button>
       </div>
+      <div class="table-wrap" style="margin-top:12px">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Nome</th>
+              <th>WhatsApp</th>
+              <th>Assunto</th>
+              <th>Mensagem</th>
+            </tr>
+          </thead>
+          <tbody id="msgsBody"></tbody>
+        </table>
+      </div>
+      <div class="status" id="msgsStatus"></div>
     </section>
   </main>
 
