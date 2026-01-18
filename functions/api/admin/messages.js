@@ -5,11 +5,11 @@ import { requireAdmin } from '../../_lib/auth.js';
 const KEY_MSGS = 'messages';
 
 export async function onRequestGet(context) {
-  // Protege com login/senha (ADMIN_USER / ADMIN_PASS) ou fallback X-Admin-Key
-  const deny = requireAdmin(context);
-  if (deny) return deny;
+  const { request, env } = context;
 
-  const { env } = context;
+  // ✅ Protege com login/senha (Basic Auth)
+  const auth = requireAdmin(request, env);
+  if (!auth.ok) return json({ error: auth.error }, 401);
 
   // Lê mensagens do KV
   const msgs = await readJson(env.MSG_KV, KEY_MSGS, []);
