@@ -62,3 +62,65 @@
         <input id="q" class="input" placeholder="Filtrar por título/whatsapp..." style="flex:1" />
         <button id="btnReload" class="btn">Recarregar</button>
       </div>
+
+      <p class="small" id="countInfo" style="margin:10px 0 0 0"></p>
+
+      <div class="table-wrap" style="margin-top:12px">
+        <table class="table" id="adsTable">
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Título</th>
+              <th>Categoria</th>
+              <th>Plano</th>
+              <th>Pago</th>
+              <th>WhatsApp</th>
+              <th>Destaques</th>
+              <th>Expira</th>
+              <th style="width:340px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="adsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="status" id="status"></div>
+    </section>
+
+    <!-- MENSAGENS -->
+    <section class="section" id="messagesPanel" style="display:none">
+      <div class="row" style="align-items:center; gap:12px">
+        <h2 style="margin:0">Mensagens de contato</h2>
+        <button id="btnLoadMsgs" class="btn ghost">Carregar mensagens</button>
+      </div>
+
+      <div class="table-wrap" style="margin-top:12px">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Nome</th>
+              <th>WhatsApp</th>
+              <th>Assunto</th>
+              <th>Mensagem</th>
+            </tr>
+          </thead>
+          <tbody id="msgsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="status" id="msgsStatus"></div>
+    </section>
+
+  </main>
+
+  <!-- MODAL / PREVIEW DO ANÚNCIO -->
+  <div class="modal" id="adModal" aria-hidden="true">
+    <div class="modal__backdrop" id="adModalBackdrop"></div>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="adModalTitle">
+      <div class="modal__head">
+        <div>
+          <h3 id="adModalTitle" style="margin:0">Prévia do anúncio</h3>
+          <p class="small" id="adModalMeta" style="margin:6px 0 0 0"></p>
+        </div>
+        <button class="btn ghost mini" id="adModalClose">
