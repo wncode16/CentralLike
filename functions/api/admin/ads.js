@@ -12,21 +12,19 @@ function safeStr(v, max = 200) {
 export async function onRequestGet(context) {
   const { request, env } = context;
 
-  // ✅ Protegido por login (auth.js)
   const auth = requireAdmin(request, env);
   if (!auth.ok) return json({ error: auth.error }, 401);
 
   const url = new URL(request.url);
-  const status = safeStr(url.searchParams.get('status') || '', 20).toLowerCase(); // pending/active/rejected
+  const status = safeStr(url.searchParams.get('status') || '', 20).toLowerCase();
   const featuredOnly = (url.searchParams.get('featured') || '') === '1';
   const q = safeStr(url.searchParams.get('q') || '', 200).toLowerCase();
   const city = safeStr(url.searchParams.get('city') || '', 120).toLowerCase();
 
   const ads = await readJson(env.ADS_KV, KEY_ADS, []);
-
   let list = Array.isArray(ads) ? ads.slice() : [];
 
-  // garantir image se houver imageKey
+  // garante image se houver imageKey
   list = list.map(a => {
     const imageKey = String(a?.imageKey || '').trim();
     const image = String(a?.image || '').trim();
@@ -41,8 +39,9 @@ export async function onRequestGet(context) {
     list = list.filter(a => String(a.status || 'pending').toLowerCase() === status);
   }
 
+  // ✅ Destaques = featured + active (aprovados)
   if (featuredOnly) {
-    list = list.filter(a => Boolean(a.featured));
+    list = list.filter(a => Boolean(a.featured) && String(a.status || 'pending').toLowerCase() === 'active');
   }
 
   if (city) {
