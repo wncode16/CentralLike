@@ -16,6 +16,7 @@
           <p id="siteCity">Admin • Brusque</p>
         </div>
       </a>
+
       <nav class="nav">
         <a href="./index.html">Início</a>
         <a href="./submit.html">Publicar</a>
@@ -25,8 +26,9 @@
     </div>
   </header>
 
-  <!-- LOGIN -->
   <main class="container">
+
+    <!-- LOGIN -->
     <section class="section" id="loginBox">
       <h2 style="margin:0 0 10px 0">Entrar no Admin</h2>
 
@@ -41,12 +43,9 @@
       </div>
 
       <div class="status" id="loginStatus"></div>
-      <p class="small" style="margin-top:10px; opacity:.9">
-        Dica: você pode alterar depois no Cloudflare → Pages → Settings → Variables and Secrets.
-      </p>
     </section>
 
-    <!-- PAINEL (só aparece após login) -->
+    <!-- PAINEL -->
     <section class="section" id="panel" style="display:none">
       <div class="row" style="align-items:center; gap:12px">
         <h2 style="margin:0">Anúncios</h2>
@@ -63,60 +62,3 @@
         <input id="q" class="input" placeholder="Filtrar por título/whatsapp..." style="flex:1" />
         <button id="btnReload" class="btn">Recarregar</button>
       </div>
-
-      <p class="small" id="countInfo" style="margin:10px 0 0 0"></p>
-
-      <div class="table-wrap" style="margin-top:12px">
-        <table class="table" id="adsTable">
-          <thead>
-            <tr>
-              <th>Imagem</th>
-              <th>Título</th>
-              <th>Categoria</th>
-              <th>Plano</th>
-              <th>Pago</th>
-              <th>WhatsApp</th>
-              <th>Destaques</th>
-              <th>Expira</th>
-              <th style="width:340px">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="adsBody"></tbody>
-        </table>
-      </div>
-
-      <div class="status" id="status"></div>
-    </section>
-
-    <section class="section" id="messagesPanel" style="display:none">
-      <div class="row" style="align-items:center; gap:12px">
-        <h2 style="margin:0">Mensagens de contato</h2>
-        <button id="btnLoadMsgs" class="btn ghost">Carregar mensagens</button>
-      </div>
-      <div class="table-wrap" style="margin-top:12px">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Nome</th>
-              <th>WhatsApp</th>
-              <th>Assunto</th>
-              <th>Mensagem</th>
-            </tr>
-          </thead>
-          <tbody id="msgsBody"></tbody>
-        </table>
-      </div>
-      <div class="status" id="msgsStatus"></div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>© <span id="year"></span> <span id="footerName">Central Like</span></p>
-  </footer>
-
-  <script src="./config.js"></script>
-  <script src="./site.js"></script>
-  <script src="./admin.js"></script>
-</body>
-</html>
