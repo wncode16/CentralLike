@@ -7,10 +7,14 @@
   // header/footer
   const siteName = cfg.SITE_NAME || 'Central Like';
   const cityName = cfg.CITY_NAME || 'Brusque';
-  document.getElementById('siteName').textContent = siteName;
-  document.getElementById('footerName').textContent = siteName;
-  document.getElementById('siteCity').textContent = `Admin • ${cityName}`;
-  document.getElementById('year').textContent = String(new Date().getFullYear());
+  const elSiteName = document.getElementById('siteName');
+  const elFooterName = document.getElementById('footerName');
+  const elSiteCity = document.getElementById('siteCity');
+  const elYear = document.getElementById('year');
+  if (elSiteName) elSiteName.textContent = siteName;
+  if (elFooterName) elFooterName.textContent = siteName;
+  if (elSiteCity) elSiteCity.textContent = `Admin • ${cityName}`;
+  if (elYear) elYear.textContent = String(new Date().getFullYear());
 
   const els = {
     loginBox: document.getElementById('loginBox'),
@@ -39,6 +43,7 @@
   let featuredOnly = false;
   let adsCache = [];
 
+  // session storage key for Basic Auth
   const SKEY = 'CL_ADMIN_BASIC';
 
   function escapeHtml(s) {
@@ -50,9 +55,9 @@
       .replaceAll("'", '&#039;');
   }
 
-  function setLoginStatus(t){ els.loginStatus.textContent = t || ''; }
-  function setStatus(t){ els.status.textContent = t || ''; }
-  function setMsgsStatus(t){ els.msgsStatus.textContent = t || ''; }
+  function setLoginStatus(t){ if (els.loginStatus) els.loginStatus.textContent = t || ''; }
+  function setStatus(t){ if (els.status) els.status.textContent = t || ''; }
+  function setMsgsStatus(t){ if (els.msgsStatus) els.msgsStatus.textContent = t || ''; }
 
   function getAuthHeader() {
     const v = sessionStorage.getItem(SKEY);
@@ -71,15 +76,14 @@
   async function apiFetch(url, opts = {}) {
     const headers = new Headers(opts.headers || {});
     headers.set('Accept', 'application/json');
+
     const auth = getAuthHeader();
     if (auth) headers.set('Authorization', auth);
 
-    // se você também usa X-Admin-Key em algum lugar, pode manter:
-    // if (cfg.ADMIN_KEY) headers.set('x-admin-key', cfg.ADMIN_KEY);
-
     const res = await fetch(url, { ...opts, headers });
+
     const text = await res.text().catch(() => '');
-    let data;
+    let data = null;
     try { data = text ? JSON.parse(text) : null; }
     catch { data = { raw: text }; }
 
@@ -91,9 +95,9 @@
   }
 
   function showPanel(on) {
-    els.panel.style.display = on ? '' : 'none';
-    els.messagesPanel.style.display = on ? '' : 'none';
-    els.btnLogout.style.display = on ? '' : 'none';
+    if (els.panel) els.panel.style.display = on ? '' : 'none';
+    if (els.messagesPanel) els.messagesPanel.style.display = on ? '' : 'none';
+    if (els.btnLogout) els.btnLogout.style.display = on ? '' : 'none';
   }
 
   function badge(text, kind='neutral') {
@@ -124,13 +128,9 @@
     return t.toLocaleDateString('pt-BR');
   }
 
-  function normalizePhone(s) {
-    return String(s || '').replace(/\D/g, '');
-  }
-
   function applyFilters(list) {
-    const st = els.filterStatus.value;
-    const q = (els.q.value || '').trim().toLowerCase();
+    const st = (els.filterStatus?.value || 'all');
+    const q = (els.q?.value || '').trim().toLowerCase();
 
     let out = list.slice();
 
@@ -147,13 +147,27 @@
       });
     }
 
+    // destaque primeiro, depois mais novo
+    out.sort((a, b) => {
+      const fa = a.featured ? 1 : 0;
+      const fb = b.featured ? 1 : 0;
+      if (fb !== fa) return fb - fa;
+      const ta = new Date(a.createdAt || 0).getTime();
+      const tb = new Date(b.createdAt || 0).getTime();
+      return (Number.isNaN(tb) ? 0 : tb) - (Number.isNaN(ta) ? 0 : ta);
+    });
+
     return out;
   }
 
   function renderAds() {
     const list = applyFilters(adsCache);
 
-    els.countInfo.textContent = `Mostrando ${list.length} anúncio(s) (total: ${adsCache.length}).`;
+    if (els.countInfo) {
+      els.countInfo.textContent = `Mostrando ${list.length} anúncio(s) (total: ${adsCache.length}).`;
+    }
+
+    if (!els.adsBody) return;
 
     els.adsBody.innerHTML = list.map(ad => {
       const img = String(ad.image || '').trim();
@@ -192,189 +206,7 @@
 
     // wire actions
     els.adsBody.querySelectorAll('button[data-act]').forEach(btn => {
-      btn.addEventListener('click', () => handleAction(btn.getAttribute('data-act'), btn.getAttribute('data-id')));
-    });
-  }
-
-  async function loadAds() {
-    setStatus('Carregando anúncios…');
-    try {
-      // endpoint admin (precisa existir no seu projeto)
-      const data = await apiFetch('/api/admin/ads', { method: 'GET' });
-      adsCache = Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : []);
-      renderAds();
-      setStatus('');
-    } catch (e) {
-      console.error(e);
-      setStatus(`⚠️ ${e?.message || 'Falha ao carregar anúncios'}`);
-    }
-  }
-
-  async function loadMessages() {
-    setMsgsStatus('Carregando mensagens…');
-    try {
-      const data = await apiFetch('/api/admin/messages', { method: 'GET' });
-      const msgs = Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : []);
-
-      els.msgsBody.innerHTML = msgs.map(m => `
-        <tr>
-          <td>${escapeHtml(m.createdAt || '')}</td>
-          <td>${escapeHtml(m.name || '')}</td>
-          <td class="mono">${escapeHtml(m.phone || '')}</td>
-          <td>${escapeHtml(m.subject || '')}</td>
-          <td>${escapeHtml(m.message || '')}</td>
-        </tr>
-      `).join('');
-
-      setMsgsStatus('');
-    } catch (e) {
-      console.error(e);
-      setMsgsStatus(`⚠️ ${e?.message || 'Falha ao carregar mensagens'}`);
-    }
-  }
-
-  function findAd(id) {
-    return adsCache.find(a => String(a.id) === String(id));
-  }
-
-  async function handleAction(act, id) {
-    const ad = findAd(id);
-    if (!ad) return;
-
-    try {
-      if (act === 'openimg') {
-        if (ad.image) window.open(ad.image, '_blank', 'noopener');
-        return;
-      }
-
-      if (act === 'setExpiry') {
-        const days = prompt('Quantos dias de validade? (ex: 30)', '30');
-        if (!days) return;
-        const n = Number(days);
-        if (!Number.isFinite(n) || n <= 0) throw new Error('Dias inválidos');
-        const expiryAt = new Date(Date.now() + n * 24 * 60 * 60 * 1000).toISOString();
-
-        await apiFetch(`/api/admin/ads/${encodeURIComponent(id)}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ expiryAt })
-        });
-
-        await loadAds();
-        return;
-      }
-
-      if (act === 'approve') {
-        await apiFetch(`/api/admin/ads/${encodeURIComponent(id)}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'active' })
-        });
-        await loadAds();
-        return;
-      }
-
-      if (act === 'reject') {
-        await apiFetch(`/api/admin/ads/${encodeURIComponent(id)}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'rejected' })
-        });
-        await loadAds();
-        return;
-      }
-
-      if (act === 'toggleFeatured') {
-        await apiFetch(`/api/admin/ads/${encodeURIComponent(id)}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ featured: !ad.featured })
-        });
-        await loadAds();
-        return;
-      }
-
-      if (act === 'del') {
-        if (!confirm('Tem certeza que deseja apagar este anúncio?')) return;
-        await apiFetch(`/api/admin/ads/${encodeURIComponent(id)}`, { method: 'DELETE' });
-        await loadAds();
-        return;
-      }
-    } catch (e) {
-      console.error(e);
-      setStatus(`⚠️ ${e?.message || 'Falha na ação'}`);
-    }
-  }
-
-  async function tryAutoLogin() {
-    const auth = getAuthHeader();
-    if (!auth) return;
-
-    setLoginStatus('Verificando…');
-    try {
-      // ping (endpoint admin precisa existir)
-      await apiFetch('/api/admin/ads', { method: 'GET' });
-      setLoginStatus('');
-      showPanel(true);
-      await loadAds();
-    } catch (e) {
-      clearAuth();
-      setLoginStatus('⚠️ Sessão expirada. Faça login novamente.');
-      showPanel(false);
-    }
-  }
-
-  async function login() {
-    const user = (els.adminUser.value || '').trim();
-    const pass = (els.adminPass.value || '').trim();
-
-    if (!user || !pass) {
-      setLoginStatus('⚠️ Informe login e senha.');
-      return;
-    }
-
-    setLoginStatus('Entrando…');
-    setAuth(user, pass);
-
-    try {
-      await apiFetch('/api/admin/ads', { method: 'GET' });
-      setLoginStatus('✅ OK!');
-      showPanel(true);
-      await loadAds();
-    } catch (e) {
-      console.error(e);
-      clearAuth();
-      showPanel(false);
-      setLoginStatus(`⚠️ Falha no login: ${e?.message || 'erro'}`);
-    }
-  }
-
-  function logout() {
-    clearAuth();
-    showPanel(false);
-    setLoginStatus('Você saiu.');
-  }
-
-  // events
-  els.btnLogin.addEventListener('click', login);
-  els.btnLogout.addEventListener('click', logout);
-  els.btnReload.addEventListener('click', loadAds);
-  els.btnLoadMsgs.addEventListener('click', loadMessages);
-
-  els.btnFeaturedOnly.addEventListener('click', () => {
-    featuredOnly = !featuredOnly;
-    els.btnFeaturedOnly.classList.toggle('is-active', featuredOnly);
-    renderAds();
-  });
-
-  els.filterStatus.addEventListener('change', renderAds);
-  els.q.addEventListener('input', renderAds);
-
-  // enter submits login
-  [els.adminUser, els.adminPass].forEach(i => i.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') login();
-  }));
-
-  // init
-  tryAutoLogin();
-})();
+      btn.addEventListener('click', () => {
+        const act = btn.getAttribute('data-act');
+        const id = btn.getAttribute('data-id');
+        h
