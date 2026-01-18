@@ -15,7 +15,11 @@
     category: document.getElementById('category'),
     neighborhood: document.getElementById('neighborhood'),
     whatsapp: document.getElementById('whatsapp'),
-    image: document.getElementById('image'),
+
+    // NOVO: upload (arquivo)
+    imageFile: document.getElementById('imageFile'),
+    imagePreview: document.getElementById('imagePreview'),
+
     description: document.getElementById('description'),
     plan: document.getElementById('plan'),
     btnSubmit: document.getElementById('btnSubmit'),
@@ -32,7 +36,9 @@
   els.category.innerHTML = categories().map(c => `<option value="${escapeHtml(c.id)}">${escapeHtml(c.label)}</option>`).join('');
 
   const plans = planCards();
-  els.plan.innerHTML = plans.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} — ${escapeHtml(p.price)} (${escapeHtml(p.duration)})</option>`).join('');
+  els.plan.innerHTML = plans
+    .map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} — ${escapeHtml(p.price)} (${escapeHtml(p.duration)})</option>`)
+    .join('');
 
   // preselect plan from query
   const qs = new URLSearchParams(location.search);
@@ -49,7 +55,7 @@
 
   els.waProof.href = waLink(`Olá! Quero pagar/anunciar na ${cfg.SITE_NAME || 'Central Like'} (${cfg.CITY_NAME || ''}). Segue o comprovante e meu anúncio:`);
 
-  function setStatus(t){
+  function setStatus(t) {
     els.status.textContent = t || '';
   }
 
@@ -58,7 +64,40 @@
     if (!els.description.value.trim()) return 'Informe a descrição.';
     const phone = els.whatsapp.value.replace(/\D/g, '');
     if (!phone || phone.length < 10) return 'Informe um WhatsApp válido (DDD + número).';
+
+    // imagem (opcional): valida tipo/tamanho se tiver arquivo
+    const file = els.imageFile?.files?.[0];
+    if (file) {
+      const okTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!okTypes.includes(file.type)) return 'Imagem inválida. Use JPG, PNG ou WebP.';
+      const max = 5 * 1024 * 1024; // 5MB
+      if (file.size > max) return 'Imagem muito grande (máx 5MB).';
+    }
     return '';
+  }
+
+  async function uploadImageIfAny() {
+    const file = els.imageFile?.files?.[0];
+    if (!file) return '';
+
+    setStatus('Enviando imagem…');
+
+    const resp = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': file.type },
+      body: await file.arrayBuffer(),
+    });
+
+    if (!resp.ok) {
+      const t = await resp.text().catch(() => '');
+      throw new Error(t || `Falha no upload (HTTP ${resp.status})`);
+    }
+
+    const j = await resp.json().catch(() => null);
+    if (!j || !j.ok || !j.url) {
+      throw new Error('Upload respondeu inválido.');
+    }
+    return String(j.url);
   }
 
   async function submit() {
@@ -66,21 +105,27 @@
     if (err) { setStatus(`⚠️ ${err}`); return; }
 
     els.btnSubmit.disabled = true;
-    setStatus('Enviando…');
-
-    const payload = {
-      city: cfg.CITY_NAME || 'Brusque',
-      title: els.title.value.trim(),
-      price: els.price.value.trim(),
-      category: els.category.value,
-      neighborhood: els.neighborhood.value.trim(),
-      whatsapp: els.whatsapp.value.replace(/\D/g, ''),
-      image: els.image.value.trim(),
-      description: els.description.value.trim(),
-      plan: els.plan.value
-    };
+    setStatus('Preparando…');
 
     try {
+      // 1) Upload (se tiver imagem)
+      const imageUrl = await uploadImageIfAny();
+
+      // 2) Enviar anúncio para aprovação
+      setStatus('Enviando anúncio…');
+
+      const payload = {
+        city: cfg.CITY_NAME || 'Brusque',
+        title: els.title.value.trim(),
+        price: els.price.value.trim(),
+        category: els.category.value,
+        neighborhood: els.neighborhood.value.trim(),
+        whatsapp: els.whatsapp.value.replace(/\D/g, ''),
+        image: imageUrl, // <- URL do R2 servida via /api/image?key=...
+        description: els.description.value.trim(),
+        plan: els.plan.value
+      };
+
       const res = await fetch('/api/ads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -96,17 +141,22 @@
       }
 
       setStatus('✅ Enviado! Agora envie o comprovante no WhatsApp para aprovação.');
+
       // open whatsapp with a prefilled message including ad id
       const msg = `Olá! Enviei um anúncio (ID ${data.id}). Quero confirmar o pagamento e aprovação.`;
       window.open(waLink(msg), '_blank', 'noopener');
 
-      // clear
+      // clear form
       els.title.value = '';
       els.price.value = '';
       els.neighborhood.value = '';
       els.whatsapp.value = '';
-      els.image.value = '';
       els.description.value = '';
+      if (els.imageFile) els.imageFile.value = '';
+      if (els.imagePreview) {
+        els.imagePreview.style.display = 'none';
+        els.imagePreview.removeAttribute('src');
+      }
     } catch (e) {
       console.error(e);
       setStatus(`⚠️ Falha ao enviar: ${e?.message || 'erro'}`);
